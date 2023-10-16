@@ -1,4 +1,4 @@
-Documentation du Code
+
 Ce code Python se connecte à Microsoft Graph API pour interagir avec les informations de comptes et de messagerie d'un utilisateur Office 365. Il offre trois fonctionnalités principales :
 
 Lire les informations d'un utilisateur
