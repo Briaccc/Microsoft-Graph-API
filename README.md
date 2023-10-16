@@ -35,5 +35,3 @@ Les informations de profil de l'utilisateur et les courriels sont récupérés �
 Les pièces jointes des courriels sont téléchargées localement.
 
 Assurez-vous d'utiliser ce code conformément aux lois sur la confidentialité et les règles de conformité.
-
-N'hésitez pas à personnaliser davantage ce README en fonction des besoins de votre projet ou à ajouter des informations supplémentaires pour aider les utilisateurs à comprendre et à utiliser votre code.
