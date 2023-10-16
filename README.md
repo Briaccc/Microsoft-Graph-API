@@ -15,7 +15,8 @@ Avant d'exécuter ce code, vous devez effectuer certaines étapes de configurati
 
 Remplacez les valeurs des variables client_id, client_secret, et tenant_id par les informations d'identification de votre application dans Azure Active Directory.
 
-Assurez-vous d'avoir installé les dépendances requises en exécutant pip install msal requests beautifulsoup4.
+Assurez-vous d'avoir installé les dépendances requises en exécutant pip install {nom de la bibliothèques}==version
+Voir le fichier requirements.txt
 
 Assurez-vous que l'application a les autorisations nécessaires pour accéder aux ressources Microsoft Graph API.
 
