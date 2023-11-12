@@ -174,17 +174,103 @@ def download_message_mime(recipient_email, message_id):
     else:
         print(f"Impossible d'obtenir les informations du message. Code de statut : {response.status_code}")
 
+# ----------------------------------------------------------------------------------------------------
 
-# Menu
+# OPTION 4
+# OPTION 4
+# OPTION 4
+# OPTION 4
+
+# ----------------------------------------------------------------------------------------------------
+
+
+
+def get_alert_details(alert_id):
+    alert_url = f"https://graph.microsoft.com/v1.0/security/alerts/{alert_id}"
+
+    response = requests.get(
+        url=alert_url,
+        headers=headers,
+    )
+
+    if response.status_code == 200:
+        alert_details = response.json()
+
+        sender_email = 'N/A'
+
+        print("Détails de l'alerte:")
+        print(f"Titre de l'alerte: {alert_details.get('title', 'N/A')}")
+        print(f"Description: {alert_details.get('description', 'N/A')}")
+        print(f"Categorie: {alert_details.get('category', 'N/A')}")
+        print(f"Statut: {alert_details.get('status', 'N/A')}")
+        print(f"Sévérité: {alert_details.get('severity', 'N/A')}")
+        print(f"Date de création: {alert_details.get('createdDateTime', 'N/A')}")
+        print(f"URL du fournisseur: {alert_details.get('sourceMaterials', ['N/A'])[0]}")
+        
+        print("\nUtilisateurs associés:")
+        for user_state in alert_details.get('userStates', []):
+            print(f"  Nom du compte: {user_state.get('accountName', 'N/A')}")
+            print(f"  Domaine: {user_state.get('domainName', 'N/A')}")
+            print(f"  Rôle de l'email: {user_state.get('emailRole', 'N/A')}")
+            print(f"  Adresse e-mail: {user_state.get('userPrincipalName', 'N/A')}")
+
+            if user_state.get('emailRole') == 'sender':
+                sender_email = user_state.get('userPrincipalName', 'N/A')
+
+            print()
+
+        recipient_email = user_state.get('userPrincipalName', 'N/A')
+
+        user_search_url = f"https://graph.microsoft.com/v1.0/users?$filter=mail eq '{recipient_email}'"
+
+
+        response = requests.get(
+            url=user_search_url,
+            headers=headers,
+        )
+
+        if response.status_code == 200:
+            user_data = response.json()
+            if user_data.get("value"):
+                user_id = user_data["value"][0]["id"]
+                
+                user_emails_url = f"https://graph.microsoft.com/v1.0/users/Briac@6mk6l2.onmicrosoft.com/messages?&$filter=from/emailAddress/address eq 'MSSecurity-noreply@microsoft.com'"
+
+                response = requests.get(
+                    url=user_emails_url,
+                    headers=headers,
+                )
+
+
+
+                if response.status_code == 200:
+                    emails = response.json()
+                    print(f"Le courriel reçu {recipient_email} provenant de l'expéditeur {sender_email}:")
+                    for email in emails.get("value", []):
+                        print(f"ID du courriel : {email.get('id', 'N/A')}")  # Ajout de l'ID
+                        print(f"Objet : {email.get('subject', 'N/A')}")
+                        print(f"Reçu le : {email.get('receivedDateTime', 'N/A')}\n")
+                else:
+                    print(f"Impossible d'obtenir les courriels de l'utilisateur. Code de statut : {response.status_code}")
+            else:
+                print(f"Utilisateur avec l'adresse e-mail {recipient_email} non trouvé.")
+        else:
+            print(f"Impossible de rechercher l'utilisateur. Code de statut : {response.status_code}")
+
+    else:
+        print(f"Impossible d'obtenir les informations du message. Code de statut : {response.status_code}")
+
+
 
 while True:
     print("Menu:")
     print("0. Quitter")
     print("1. Lire les informations d'un utilisateur")
     print("2. Lire les 5 derniers courriels d'un utilisateur")
-    print("3. Téléchargé le courriel en format MIME et les attachements")
+    print("3. Télécharger le courriel en format MIME et les pièces jointes")
+    print("4. Obtenir les détails d'une alerte")
 
-    choice = input("Sélectionnez une option (0/1/2/3) : ")
+    choice = input("Sélectionnez une option (0/1/2/3/4) : ")
 
     if choice == '0':
         break  # Quitter le programme
@@ -198,5 +284,9 @@ while True:
         recipient_email = input("Entrez l'adresse électronique du destinataire du message : ")
         message_id = input("Entrez le ID du message : ")
         download_message_mime(recipient_email, message_id)
+    elif choice == '4':
+        # Exécutez la fonction avec l'ID de l'alerte
+        alert_id = input("Entrez l'ID de l'alerte : ")
+        get_alert_details(alert_id)
     else:
-        print("Option invalide. Sélectionnez 0, 1, 2, 3.")
+        print("Option invalide. Sélectionnez 0, 1, 2, 3, 4.")
